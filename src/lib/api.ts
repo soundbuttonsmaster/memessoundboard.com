@@ -1,6 +1,6 @@
 // export const API_BASE_URL = 'http://play.soundboard.cloud/api/SoundBoard.soundbuttons.com';
 
-export const API_BASE_URL = 'http://192.168.1.67:8051/api/MemesSoundBoard';
+export const API_BASE_URL = 'http://play.soundboard.cloud/api/memessoundboard.com';
 
 export interface Sound {
   id: number;

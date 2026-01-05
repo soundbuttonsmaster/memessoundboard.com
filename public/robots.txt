@@ -1,0 +1,66 @@
+# robots.txt for memessoundboard.com
+# This file provides instructions to web crawlers and AI systems about which parts of the site can be accessed
+
+# Allow all crawlers to access public content
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Google Search Engine
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+# OpenAI GPTBot - Allow AI training and indexing
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+# ChatGPT User Agent
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+# Common Crawl Bot
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+# Anthropic Claude
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+# Applebot
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+
+# Facebook Crawler
+User-agent: FacebookBot
+Allow: /
+Disallow: /api/
+
+# Bing Search Engine
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+# Sitemap locations
+Sitemap: https://memessoundboard.com/sitemap.xml
+Sitemap: https://memessoundboard.com/sitemap-static.xml
+Sitemap: https://memessoundboard.com/sitemap-soundboards.xml
+Sitemap: https://memessoundboard.com/sitemap-sounds.xml
+
+# Host information
+Host: https://memessoundboard.com
+
