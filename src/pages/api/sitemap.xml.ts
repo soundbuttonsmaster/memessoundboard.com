@@ -7,15 +7,15 @@ export const GET: APIRoute = async () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>${baseUrl}/sitemap-static.xml</loc>
+    <loc>${baseUrl}/api/sitemap-static.xml</loc>
     <lastmod>${currentDate}</lastmod>
   </sitemap>
   <sitemap>
-    <loc>${baseUrl}/sitemap-soundboards.xml</loc>
+    <loc>${baseUrl}/api/sitemap-soundboards.xml</loc>
     <lastmod>${currentDate}</lastmod>
   </sitemap>
   <sitemap>
-    <loc>${baseUrl}/sitemap-sounds.xml</loc>
+    <loc>${baseUrl}/api/sitemap-sounds.xml</loc>
     <lastmod>${currentDate}</lastmod>
   </sitemap>
 </sitemapindex>`;
@@ -27,4 +27,3 @@ export const GET: APIRoute = async () => {
     },
   });
 };
-

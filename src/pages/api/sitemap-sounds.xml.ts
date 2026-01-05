@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { fetchSounds } from '../lib/api';
+import { fetchSounds } from '../../lib/api';
 
 // Helper function to create URL-friendly slugs
 function slugify(text: string): string {
@@ -69,4 +69,3 @@ export const GET: APIRoute = async () => {
     },
   });
 };
-

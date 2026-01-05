@@ -1,4 +1,22 @@
 {
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap.xml"
+    },
+    {
+      "source": "/sitemap-static.xml",
+      "destination": "/api/sitemap-static.xml"
+    },
+    {
+      "source": "/sitemap-soundboards.xml",
+      "destination": "/api/sitemap-soundboards.xml"
+    },
+    {
+      "source": "/sitemap-sounds.xml",
+      "destination": "/api/sitemap-sounds.xml"
+    }
+  ],
   "headers": [
     {
       "source": "/sitemap.xml",
@@ -84,4 +102,3 @@
     }
   ]
 }
-

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { fetchCategories } from '../lib/api';
+import { fetchCategories } from '../../lib/api';
 
 // Helper function to create URL-friendly slugs
 function slugify(text: string): string {
@@ -63,4 +63,3 @@ export const GET: APIRoute = async () => {
     },
   });
 };
-

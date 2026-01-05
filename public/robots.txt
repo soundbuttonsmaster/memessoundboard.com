@@ -55,7 +55,7 @@ User-agent: Bingbot
 Allow: /
 Disallow: /api/
 
-# Sitemap locations
+# Sitemap locations (using rewrites to /api/* routes)
 Sitemap: https://memessoundboard.com/sitemap.xml
 Sitemap: https://memessoundboard.com/sitemap-static.xml
 Sitemap: https://memessoundboard.com/sitemap-soundboards.xml
