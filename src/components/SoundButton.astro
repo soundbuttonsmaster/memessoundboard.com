@@ -27,58 +27,39 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
 
-// Generate vibrant, saturated colors for sound buttons
+// Generate vibrant, saturated colors matching competitor
 function generateColor(id: number): string {
   const colors = [
-    '#FF1744', // Vibrant red
-    '#2979FF', // Bright blue
-    '#00E676', // Bright green
-    '#FF9800', // Bright orange
-    '#E91E63', // Hot pink
-    '#9C27B0', // Purple
-    '#00BCD4', // Cyan
-    '#FFC107', // Amber
-    '#F44336', // Red
-    '#2196F3', // Blue
-    '#4CAF50', // Green
-    '#FF5722', // Deep orange
-    '#9C27B0', // Purple
-    '#00ACC1', // Teal
-    '#FFEB3B', // Yellow
-    '#E91E63', // Pink
-    '#3F51B5', // Indigo
-    '#8BC34A', // Light green
-    '#FF6F00', // Orange
-    '#D81B60', // Pink
-    '#1976D2', // Blue
-    '#388E3C', // Green
-    '#E64A19', // Red orange
-    '#7B1FA2', // Purple
-    '#0097A7', // Cyan
-    '#FBC02D', // Yellow
-    '#C2185B', // Pink
-    '#303F9F', // Indigo
-    '#689F38', // Light green
-    '#EF6C00', // Orange
-    '#AD1457', // Pink
-    '#0D47A1', // Dark blue
-    '#2E7D32', // Dark green
-    '#BF360C', // Deep orange
-    '#6A1B9A', // Deep purple
-    '#00695C', // Teal
-    '#F57F17', // Yellow orange
-    '#880E4F', // Dark pink
-    '#1B5E20', // Dark green
-    '#B71C1C', // Dark red
-    '#4A148C', // Dark purple
-    '#004D40', // Dark teal
-    '#E65100', // Orange red
-    '#4A148C', // Dark purple
-    '#00695C', // Dark teal
-    '#F57F17', // Yellow orange
-    '#AD1457', // Dark pink
-    '#1B5E20', // Dark green
-    '#B71C1C'  // Dark red
+    '#CD6839', // Rich brown-orange
+    '#A464C4', // Purple
+    '#7B4FA0', // Darker purple
+    '#9370DB', // Medium purple
+    '#7CCD7C', // Light green
+    '#D2691E', // Chocolate
+    '#CD853F', // Peru
+    '#66CDAA', // Medium aquamarine
+    '#5DADE2', // Light blue
+    '#8B7355', // Brown
+    '#90EE90', // Light green
+    '#FF6347', // Tomato
+    '#9B59B6', // Purple
+    '#5DADE2', // Blue
+    '#52C77D', // Green
+    '#F39C12', // Orange
+    '#E67E22', // Carrot
+    '#1ABC9C', // Turquoise
+    '#95A5A6', // Grey
+    '#7F8C8D', // Grey
+    '#E74C3C', // Red
+    '#8E44AD', // Purple
+    '#16A085', // Teal
+    '#27AE60', // Green
+    '#D35400', // Orange
+    '#34495E', // Dark blue-grey
+    '#C0392B', // Dark red
+    '#6C3483', // Dark purple
+    '#2874A6', // Blue
+    '#138D75'  // Teal
   ];
   return colors[id % colors.length];
 }
@@ -88,7 +69,7 @@ const buttonColor = generateColor(sound.id);
 
 <div class="instant">
   <!-- Sprite wrapper with colored button behind -->
-  <div
+  <div 
     class="sprite-wrapper"
     role="button"
     aria-label={`Play ${sound.name}`}
@@ -96,79 +77,13 @@ const buttonColor = generateColor(sound.id);
     data-audio-url={`${API_BASE_URL}/sounds/${sound.id}/audio`}
     id={buttonId}
   >
-    <!-- Ring SVG overlay with dynamic color -->
-    <div class="button-ring-svg" style={`--button-color: ${buttonColor};`}>
-      <!-- Default state SVG (Taller/Unpressed) -->
-      <svg class="button-svg default-svg" id={`svg-def-${sound.id}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 508.88 499.32">
-        <defs>
-          <linearGradient id={`lg1-def-${sound.id}`} x1="92.43" y1="263.72" x2="416.42" y2="263.72" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="var(--button-color)" stop-opacity="0.8"/>
-            <stop offset="0.24" stop-color="var(--button-color)"/>
-            <stop offset="0.5" stop-color="var(--button-color)" stop-opacity="0.7"/>
-            <stop offset="1" stop-color="var(--button-color)" stop-opacity="0.6"/>
-          </linearGradient>
-          <radialGradient id={`rg1-def-${sound.id}`} cx="264.99" cy="167.81" r="119.71" gradientTransform="translate(-30.63 12.57) rotate(-.72) scale(1.04 1.02) skewX(2.4)" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="var(--button-color)"/>
-            <stop offset="1" stop-color="black" stop-opacity="0.3"/>
-          </radialGradient>
-          <linearGradient id={`lg2-def-${sound.id}`} x1="905.54" y1="-339.28" x2="1020.84" y2="-139.59" gradientTransform="translate(1217.61 -59.25) rotate(-180)" gradientUnits="userSpaceOnUse">
-            <stop offset=".05" stop-color="#fff" stop-opacity=".83"/>
-            <stop offset=".25" stop-color="#fff" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id={`lg3-def-${sound.id}`} x1="184.03" y1="58.27" x2="316.98" y2="288.54" gradientUnits="userSpaceOnUse">
-            <stop offset=".05" stop-color="#fff" stop-opacity=".83"/>
-            <stop offset=".73" stop-color="#fff" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <g>
-          <path fill="#6d6e71" d="M454.44,265.74v58.01c0,27.68-19.51,55.17-58.54,76.16-78.06,42.17-204.9,42.17-282.95,0-39.03-20.99-58.54-48.48-58.54-76.16v-58.01h400.04Z"/>
-          <path fill="#939598" d="M454.44,261.91v54.03c0,25.78-19.51,51.38-58.54,70.93-78.06,39.27-204.9,39.27-282.95,0-39.03-19.55-58.54-45.15-58.54-70.93v-54.03h400.04Z"/>
-          <path fill="#a7a9ac" d="M395.92,343.57c-78.13,45.11-204.82,45.11-282.95,0-78.14-45.11-78.14-118.25,0-163.36,78.13-45.11,204.82-45.11,282.95,0,78.14,45.11,78.14,118.25,0,163.36Z"/>
-          <path fill={`url(#lg1-def-${sound.id})`} d="M416.42,180.95v71.97c0,24.03-15.81,47.9-47.41,66.12-63.22,36.61-165.95,36.61-229.17,0-31.61-18.22-47.41-42.09-47.41-66.12v-71.97h323.99Z"/>
-          <path fill="var(--button-color)" d="M369.02,247.08c-63.28,36.53-165.88,36.53-229.16,0-63.28-36.54-63.28-95.77,0-132.31,63.28-36.54,165.88-36.53,229.16,0,63.28,36.54,63.28,95.77,0,132.31Z"/>
-          <path fill={`url(#rg1-def-${sound.id})`} d="M366.96,239.18c-57.88,34.35-154.76,35.56-216.37,2.71-61.62-32.85-64.65-87.34-6.76-121.69,57.88-34.35,154.76-35.56,216.37-2.71,61.62,32.85,64.65,87.34,6.76,121.69Z"/>
-        </g>
-        <g>
-          <path fill={`url(#lg2-def-${sound.id})`} d="M254.93,274.48c-41.23,0-82.51-9.03-114-27.1-31.16-17.86-48.34-41.8-48.37-67.41-.04-25.43,16.88-49.22,47.63-66.96,62.59-36.14,164.75-36.15,227.73-.02,31.15,17.86,48.33,41.8,48.37,67.4.04,25.44-16.89,49.23-47.65,66.98-31.29,18.07-72.48,27.11-113.71,27.11ZM253.93,91.63c-40.18,0-80.31,8.8-110.79,26.41-28.87,16.66-44.75,38.65-44.72,61.92.03,23.45,16.17,45.6,45.44,62.38h0c61.36,35.21,160.88,35.21,221.84,0,28.88-16.67,44.77-38.67,44.74-61.94-.03-23.44-16.17-45.59-45.44-62.37-30.68-17.6-70.9-26.4-111.07-26.4Z"/>
-          <ellipse fill={`url(#lg3-def-${sound.id})`} cx="254.43" cy="180.19" rx="162" ry="94.12" opacity=".6"/>
-        </g>
-      </svg>
-
-      <!-- Pressed state SVG (Compressed) -->
-      <svg class="button-svg pressed-svg" id={`svg-pr-${sound.id}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 508.88 499.32">
-        <defs>
-          <linearGradient id={`lg1-pr-${sound.id}`} x1="92.64" y1="259.72" x2="416.24" y2="259.72" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="var(--button-color)" stop-opacity="0.8"/>
-            <stop offset="0.24" stop-color="var(--button-color)"/>
-            <stop offset="0.5" stop-color="var(--button-color)" stop-opacity="0.7"/>
-            <stop offset="1" stop-color="var(--button-color)" stop-opacity="0.6"/>
-          </linearGradient>
-          <radialGradient id={`rg1-pr-${sound.id}`} cx="261.9" cy="224.91" r="119.56" gradientTransform="translate(-30.63 3.85) rotate(-.63) scale(1.04 .9) skewX(2.56)" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="var(--button-color)"/>
-            <stop offset="1" stop-color="black" stop-opacity="0.3"/>
-          </radialGradient>
-          <linearGradient id={`lg2-pr-${sound.id}`} x1="909.13" y1="-356.22" x2="1017.21" y2="-169.02" gradientTransform="translate(1217.61 -59.25) rotate(-180)" gradientUnits="userSpaceOnUse">
-            <stop offset=".05" stop-color="#fff" stop-opacity=".83"/>
-            <stop offset=".25" stop-color="#fff" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id={`lg3-pr-${sound.id}`} x1="188.44" y1="89.07" x2="313.09" y2="304.96" gradientUnits="userSpaceOnUse">
-            <stop offset=".05" stop-color="#fff" stop-opacity=".83"/>
-            <stop offset=".73" stop-color="#fff" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <g>
-          <path fill="#6d6e71" d="M454.44,265.74v58.01c0,27.68-19.51,55.17-58.54,76.16-78.06,42.17-204.9,42.17-282.95,0-39.03-20.99-58.54-48.48-58.54-76.16v-58.01h400.04Z"/>
-          <path fill="#939598" d="M454.44,261.91v54.03c0,25.78-19.51,51.38-58.54,70.93-78.06,39.27-204.9,39.27-282.95,0-39.03-19.55-58.54-45.15-58.54-70.93v-54.03h400.04Z"/>
-          <path fill="#a7a9ac" d="M395.92,343.57c-78.13,45.11-204.82,45.11-282.95,0-78.14-45.11-78.14-118.25,0-163.36,78.13-45.11,204.82-45.11,282.95,0,78.14,45.11,78.14,118.25,0,163.36Z"/>
-          <path fill={`url(#lg1-pr-${sound.id})`} d="M416.24,199.34v51.58c0,2.5-.25,5.03-.8,7.53-.22,1.1-.49,2.22-.85,3.32-4.75,15.77-20,30.9-45.73,42.98-63.12,29.83-165.73,29.83-228.87,0-25.74-12.08-40.95-27.22-45.73-42.98-.33-1.1-.6-2.22-.82-3.32-.55-2.5-.8-5.03-.8-7.53v-51.58c.05-.05.11-.11.16-.14.22-2.31.63-4.61,1.26-6.89h320.74c.63,2.28,1.04,4.59,1.26,6.89.05.03.11.08.16.14Z"/>
-          <path fill="var(--button-color)" d="M416.24,201.4v3.96c-.88,19.06-14.69,37.98-41.47,53.09-1.89,1.07-3.85,2.11-5.88,3.16-.11.05-.22.11-.33.16-63.12,31.94-165.1,31.94-228.24,0-.11-.05-.22-.11-.33-.16-2.03-1.04-3.98-2.09-5.88-3.16-26.78-15.11-40.59-34.03-41.47-53.09v-3.96c.03-.74.08-1.46.16-2.2.22-2.31.63-4.61,1.26-6.89,4.56-17.25,19.86-33.89,45.92-47.16,63.2-32.13,165.7-32.13,228.9.03,26.06,13.24,41.36,29.88,45.92,47.13.63,2.28,1.04,4.59,1.26,6.89.08.74.14,1.46.16,2.2Z"/>
-          <path fill={`url(#rg1-pr-${sound.id})`} d="M366.83,254.66c-57.81,30.23-154.57,31.3-216.11,2.38-61.54-28.92-64.57-76.87-6.75-107.1,57.81-30.23,154.57-31.3,216.11-2.38,61.54,28.92,64.57,76.87,6.75,107.1Z"/>
-        </g>
-        <g>
-          <path fill={`url(#lg2-pr-${sound.id})`} d="M254.95,285.68c-41.18,0-82.41-7.88-113.86-23.66-31.12-15.59-48.28-36.49-48.31-58.84-.04-22.2,16.86-42.96,47.57-58.45,62.51-31.55,164.55-31.55,227.46-.01,31.12,15.59,48.27,36.48,48.31,58.83.04,22.2-16.87,42.97-47.59,58.46-31.25,15.77-72.39,23.66-113.57,23.66ZM253.94,126.07c-40.13,0-80.21,7.68-110.66,23.05-28.83,14.54-44.7,33.74-44.66,54.05.03,20.46,16.15,39.8,45.39,54.45h0c61.29,30.73,160.69,30.73,221.57,0,28.85-14.55,44.72-33.75,44.68-54.07-.03-20.46-16.15-39.8-45.39-54.44-30.64-15.36-70.81-23.05-110.93-23.05Z"/>
-          <ellipse fill={`url(#lg3-pr-${sound.id})`} cx="254.44" cy="203.38" rx="161.8" ry="82.15" opacity=".6"/>
-        </g>
-      </svg>
+    <!-- Colored inner button (behind the ring sprite) -->
+    <div 
+      class="inner-btn" 
+      style={`background: ${buttonColor};`}
+    ></div>
+    <!-- Ring sprite overlay (transparent in center) -->
+    <div class="button-ring"></div>
   </div>
   
   <a href={`/instant/${slugify(sound.name)}-${sound.id}`} class="instant-link link-secondary">{sound.name}</a>
@@ -235,65 +150,49 @@ const buttonColor = generateColor(sound.id);
     z-index: 0;
   }
 
-  /* Ring SVG overlay (transparent in center so color shows through) */
-  .button-ring-svg {
+  /* Ring sprite overlay (transparent in center so color shows through) */
+  .button-ring {
     position: relative;
     width: 110px;
     height: 110px;
+    background: url('/images/transparent_button_small.png') no-repeat 0 0;
+    background-size: 220px 110px; /* 2 frames side by side */
     display: flex;
     justify-content: center;
     align-items: center;
     pointer-events: none;
     z-index: 1;
-    background: var(--main-bg, #ffffff);
   }
 
-  .button-svg {
-    position: absolute;
-    width: 110px;
-    height: 110px;
-    top: 0;
-    left: 0;
-    opacity: 1;
+  /* Pressed state - shift to second frame */
+  .sprite-wrapper.pressed .button-ring {
+    background-position: -110px 0;
   }
 
-  .pressed-svg {
-    opacity: 0;
-  }
-
-  /* Pressed state - instant switch to prevent white flash */
-  .sprite-wrapper.pressed .default-svg {
-    opacity: 0;
-  }
-
-  .sprite-wrapper.pressed .pressed-svg {
-    opacity: 1;
-  }
-
-  /* Mobile: Keep smaller size */
+  /* Mobile: Increased size */
   @media (max-width: 768px) {
     .instant {
-      width: 75px;
+      width: 85px;
     }
 
     .sprite-wrapper {
-      width: 75px;
-      height: 75px;
+      width: 85px;
+      height: 85px;
     }
 
     .inner-btn {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
     }
 
-    .button-ring-svg {
-      width: 75px;
-      height: 75px;
+    .button-ring {
+      width: 85px;
+      height: 85px;
+      background-size: 170px 85px;
     }
 
-    .button-svg {
-      width: 75px;
-      height: 75px;
+    .sprite-wrapper.pressed .button-ring {
+      background-position: -85px 0;
     }
   }
 
@@ -372,251 +271,31 @@ const buttonColor = generateColor(sound.id);
       height: 16px;
     }
   }
-
-  /* Custom Share Action Sheet Styles */
-  :global(.share-dialog-overlay) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-
-  :global(.share-dialog-overlay.active) {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  :global(.share-dialog) {
-    background: white;
-    width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
-    overflow: hidden;
-    transform: translateY(20px);
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    margin: 16px;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  :global(.share-dialog-overlay.active .share-dialog) {
-    transform: translateY(0);
-  }
-
-  :global(.share-dialog-header) {
-    padding: 16px 20px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    border-bottom: 1px solid #eee;
-  }
-
-  :global(.share-dialog-title) {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  :global(.share-dialog-icon) {
-    width: 40px;
-    height: 40px;
-    background: #e8f0fe;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1a73e8;
-  }
-
-  :global(.share-dialog-text h3) {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-  }
-
-  :global(.share-dialog-text p) {
-    margin: 2px 0 0;
-    font-size: 14px;
-    color: #666;
-  }
-
-  :global(.share-close-btn) {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: #666;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  :global(.share-close-btn:hover) {
-    background: #f5f5f5;
-  }
-
-  :global(.share-grid) {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding: 24px 20px;
-    overflow-y: auto;
-  }
-
-  :global(.share-item) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    background: none;
-    border: 1px solid #eee;
-    padding: 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  :global(.share-item:hover) {
-    background: #f8f9fa;
-    border-color: #ddd;
-    transform: translateY(-2px);
-  }
-
-  :global(.share-item-icon) {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  :global(.share-item-label) {
-    font-size: 12px;
-    font-weight: 500;
-    color: #333;
-  }
-
-  :global(.share-footer) {
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  :global(.copy-link-container) {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  :global(.copy-link-label) {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #444;
-  }
-
-  :global(.copy-input-wrapper) {
-    display: flex;
-    gap: 8px;
-  }
-
-  :global(.share-url-input) {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    color: #555;
-    background: #f9f9f9;
-  }
-
-  :global(.copy-btn) {
-    background: #1a1a1a;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-  }
-
-  :global(.copy-btn:hover) {
-    background: #333;
-  }
-
-  :global(.native-share-btn) {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background 0.2s;
-  }
-
-  :global(.native-share-btn:hover) {
-    background: #f5f5f5;
-  }
-
-  @media (max-width: 480px) {
-    :global(.share-grid) {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      padding: 16px;
-    }
-    
-    :global(.share-item) {
-      padding: 10px;
-    }
-  }
-
-  /* Animation for download spinner */
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  :global(.animate-spin) {
-    animation: spin 1s linear infinite;
-  }
 </style>
+
 <script>
   function copyInstantLink(url, soundId) {
     navigator.clipboard.writeText(url).then(() => {
-      // Logic for tooltip or notification could go here
+      const btn = document.getElementById(`copy-button-${soundId}`);
+      if (btn) {
+        const originalTitle = btn.title;
+        btn.title = 'Copied!';
+        setTimeout(() => {
+          btn.title = originalTitle;
+        }, 2000);
+      }
     });
+  }
+
+  function showShareOptions(title, url, audioUrl, soundId) {
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        url: url
+      }).catch(err => console.log('Share cancelled'));
+    } else {
+      copyInstantLink(url, soundId);
+    }
   }
 
   // Global audio playback management
@@ -780,12 +459,6 @@ const buttonColor = generateColor(sound.id);
       const soundButtons = document.querySelectorAll('.sprite-wrapper:not([data-initialized="true"])');
       soundButtons.forEach(initializeSoundButton);
     }
-    
-    // Check if SoundBoard namespace exists, if not create it
-    window.SoundBoard = window.SoundBoard || {};
-    window.SoundBoard.initAllSoundButtons = initAllSoundButtons;
-    window.SoundBoard.initActionButtons = initActionButtons;
-    window.SoundBoard.playAudio = playAudio; // Expose playAudio if needed for other scripts
 
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
@@ -812,109 +485,18 @@ const buttonColor = generateColor(sound.id);
 
   // Action buttons initialization
   function initActionButtons() {
-    // Import favorite functions dynamically
-    import('../lib/api.js').then(({ addToFavorites, removeFromFavorites, fetchUserFavorites }) => {
-      import('../lib/auth.js').then(({ getAuthToken }) => {
-        const token = getAuthToken();
-
-        // If user is logged in, fetch their favorites and update UI
-        if (token) {
-          fetchUserFavorites(token, 1, 100).then(response => {
-            if (response && response.results) {
-              const favoriteSoundIds = new Set(response.results.map(sound => sound.id));
-              
-              document.querySelectorAll('.favorite-btn, .sound-action-btn.favorite-btn').forEach(btn => {
-                const soundId = parseInt(btn.getAttribute('data-sound-id'));
-                if (favoriteSoundIds.has(soundId)) {
-                  const svg = btn.querySelector('svg');
-                  if (svg) {
-                    svg.setAttribute('fill', 'currentColor');
-                  }
-                  // Update dataset state
-                  const soundElement = btn.closest('.instant');
-                  if (soundElement) {
-                    soundElement.dataset.is_favorited = 'true';
-                  }
-                }
-              });
-            }
-          }).catch(err => console.error('Error fetching favorites:', err));
-        }
-
-        // Configure event listeners for favorites
-        document.querySelectorAll('.favorite-btn, .sound-action-btn.favorite-btn').forEach(btn => {
-          // Prevent all events from bubbling to sound button
-          ['click', 'mousedown', 'touchstart'].forEach(eventType => {
-            btn.addEventListener(eventType, (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }, { passive: false });
-          });
-
-          btn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            const soundId = btn.getAttribute('data-sound-id');
-            // Re-get token in case it changed
-            const currentToken = getAuthToken();
-
-            if (!currentToken) {
-              // Redirect to login if not authenticated
-              window.location.href = '/login';
-              return;
-            }
-
-            if (!soundId) return;
-
-            const soundIdNum = parseInt(soundId);
-            const svg = btn.querySelector('svg');
-            const isCurrentlyFavorited = svg?.getAttribute('fill') === 'currentColor';
-
-            try {
-              let success = false;
-
-              if (isCurrentlyFavorited) {
-                // Remove from favorites
-                success = await removeFromFavorites(currentToken, soundIdNum);
-                if (success && svg) {
-                  svg.setAttribute('fill', 'none');
-                }
-              } else {
-                // Add to favorites
-                success = await addToFavorites(currentToken, soundIdNum);
-                if (success && svg) {
-                  svg.setAttribute('fill', 'currentColor');
-                }
-              }
-
-              if (success) {
-                // Update the is_favorited state in the sound object for consistency
-                const soundElement = btn.closest('.instant');
-                if (soundElement) {
-                  const soundData = soundElement.dataset;
-                  soundData.is_favorited = (!isCurrentlyFavorited).toString();
-                }
-              }
-            } catch (error) {
-              console.error('Favorite action failed:', error);
-            }
-          });
-        });
+    // Action buttons
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const soundId = btn.getAttribute('data-sound-id');
+        console.log('Favorite sound:', soundId);
       });
     });
 
-    document.querySelectorAll('.instant-action-button:not(.favorite-btn):not(.webshare):not(.download-btn), .sound-action-btn:not(.favorite-btn):not(.webshare):not(.download-btn)').forEach(btn => {
-      // Prevent all events from bubbling to sound button
-      ['click', 'mousedown', 'touchstart'].forEach(eventType => {
-        btn.addEventListener(eventType, (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }, { passive: false });
-      });
-
+    document.querySelectorAll('.instant-action-button:not(.favorite-btn):not(.webshare)').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
-        e.preventDefault();
         const soundId = btn.getAttribute('data-sound-id');
         // Helper to create slug
         function slugify(text) {
@@ -926,18 +508,9 @@ const buttonColor = generateColor(sound.id);
       });
     });
 
-    document.querySelectorAll('.webshare, .sound-action-btn.webshare').forEach(btn => {
-      // Prevent all events from bubbling to sound button
-      ['click', 'mousedown', 'touchstart'].forEach(eventType => {
-        btn.addEventListener(eventType, (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }, { passive: false });
-      });
-
+    document.querySelectorAll('.webshare').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
-        e.preventDefault();
         const soundId = btn.getAttribute('data-sound-id');
         // Helper to create slug
         function slugify(text) {
@@ -945,245 +518,8 @@ const buttonColor = generateColor(sound.id);
         }
         const soundName = btn.closest('.instant')?.querySelector('.instant-link')?.textContent || '';
         const url = `${window.location.origin}/instant/${slugify(soundName)}-${soundId}`;
-        
-        // Show the new custom share dialog
-        showCustomShareDialog(soundName, url);
+        showShareOptions('Sound Button', url, '', soundId);
       });
-    });
-
-    document.querySelectorAll('.download-btn, .sound-action-btn.download-btn').forEach(btn => {
-      // Prevent all events from bubbling to sound button
-      ['click', 'mousedown', 'touchstart'].forEach(eventType => {
-        btn.addEventListener(eventType, (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }, { passive: false });
-      });
-
-      btn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Visual feedback - Start
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="animate-spin" style="color: #2ECC71;">
-             <path d="M21 12a9 9 0 1 1-6.219-8.56" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        `;
-        btn.style.pointerEvents = 'none'; // Prevent double clicks
-        
-        const url = btn.getAttribute('href');
-        const filename = btn.getAttribute('download') || 'sound.mp3';
-        
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Download failed');
-            
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = filename; 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl);
-
-            // Reset button state on success
-            btn.innerHTML = originalHtml;
-            btn.style.pointerEvents = '';
-
-        } catch (err) {
-            console.error('Fetch download failed, falling back to direct link:', err);
-            
-            // Fallback: Create invisible iframe to trigger download
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = url;
-            document.body.appendChild(iframe);
-            
-            // Cleanup iframe after enough time for the request to initiate
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-            }, 60000);
-
-            // Reset button state slightly delayed for fallback perception
-            setTimeout(() => {
-              btn.innerHTML = originalHtml;
-              btn.style.pointerEvents = '';
-            }, 2000);
-        }
-      });
-    });
-  }
-
-  // Create and show custom share dialog
-  function showCustomShareDialog(title, url) {
-    // Remove existing dialog if any
-    const existing = document.getElementById('custom-share-overlay');
-    if (existing) existing.remove();
-
-    const encodedUrl = encodeURIComponent(url);
-    const encodedTitle = encodeURIComponent(title);
-
-    const shareOptions = [
-      { name: 'X', icon: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>', url: `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}` },
-      { name: 'Facebook', icon: '<path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.791 1.657-2.791 3.914v3.218h2.756l-.448 3.668h-2.308v7.98H9.101z"/>', url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-      { name: 'Instagram', icon: '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>', url: `https://www.instagram.com/` }, // Fallback to main site
-      { name: 'WhatsApp', icon: '<path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.61.591 1.495 1.019 2.796 1.019 3.181 0 5.768-2.586 5.768-5.766 0-3.18-2.587-5.766-5.768-5.766zm0 10.162c-2.267 0-4.168-1.95-4.168-4.396 0-2.445 1.901-4.396 4.168-4.396 2.267 0 4.168 1.95 4.168 4.396 0 2.446-1.901 4.396-4.168 4.396zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.019 19.332h-.005a7.296 7.296 0 0 1-3.719-1.019l-2.766.725.738-2.697a7.293 7.293 0 0 1-1.116-3.889c0-4.029 3.279-7.308 7.308-7.308s7.308 3.279 7.308 7.308-3.279 7.308-7.308 7.308z"/>', url: `https://wa.me/?text=${encodedTitle} - ${encodedUrl}` },
-      { name: 'Telegram', icon: '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-1.447-1.21-1.44-2.075.01-.21.073-.366.21-.463.104-.071.185-.143.256-.165a.528.528 0 0 1 .212-.03c.173.04.39.234.57.406.226.226.415.5.56.692.157.218.422.331.642.264.209-.065.353-.222.437-.442.164-.444.337-1.18.54-2.246.116-.595.252-1.247.418-1.953.166-.702.353-1.404.542-2.106.189-.696.388-1.394.591-2.091a.722.722 0 0 1 .163-.25.388.388 0 0 1 .251-.126c.057 0 .163.008.235.059.09.064.162.171.19.287.029.124.041.261.041.403 0 .084-.01.167-.029.25-.035.187-.112.39-.249.608-.063.107-.147.201-.243.279-.224.164-.497.143-.704-.07-.106-.11-.185-.267-.194-.438-.015-.265.017-.563.072-.846.072-.418.182-.835.392-1.194.382-.735 1.065-1.264 1.913-1.264z"/>', url: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}` },
-      { name: 'Reddit', icon: '<path d="M22 11.5c0-.825-.675-1.5-1.5-1.5a1.5 1.5 0 0 0-1.15.545c-1.6-.745-3.692-1.218-5.968-1.263l1.24-4.832 3.636.852a1.503 1.503 0 1 0 .232-.97L14.47 3.328a.5.5 0 0 0-.585.34l-1.42 5.536a.498.498 0 0 0 .02.266c-2.348.106-4.51.597-6.136 1.378A1.5 1.5 0 0 0 5 10a1.5 1.5 0 0 0-1.5 1.5c0 .64.408 1.187.986 1.406-.05.27-.086.545-.086.824 0 4.143 4.5 7.5 7.6 7.5s7.6-3.357 7.6-7.5c0-.28-.036-.554-.086-.824A1.503 1.503 0 0 0 22 11.5zM12 19c-2.056 0-3.8-1.07-3.8-2.6 0-1.53 1.744-2.6 3.8-2.6s3.8 1.07 3.8 2.6c0 1.53-1.744 2.6-3.8 2.6zm-4-4.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>', url: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}` },
-      { name: 'LinkedIn', icon: '<path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h5v-8.306c0-4.613 6.115-4.954 6.127 0v8.306h4.967v-10.165c0-7.718-8.245-7.486-11.126-4.364v-1.471z"/>', url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-      { name: 'Pinterest', icon: '<path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.399.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.173 0 7.41 2.967 7.41 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.62 0 12.017 0z"/>', url: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedTitle}` },
-      { name: 'Tumblr', icon: '<path d="M16.942 16.577h2.89v4.295c0 .358.01 1.637-1.353 2.476-1.558.955-4.116.711-4.75.642-4.102-.387-5.011-3.268-5.011-3.268v-4.145H6.205V12.78c1.782-.167 3.585-1.282 4.2-3.132.327-1.053.4-2.812.38-3.648h4.086v3.425h4.877v3.778h-4.877v3.636c0 .991.246 1.487.697 1.765.452.278 1.109.119 1.474-.265.178-.19.341-.536.42-.727l-.522.965z"/>', url: `https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodedUrl}` },
-      { name: 'Email', icon: '<path d="M2.25 6h19.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 21.75 20H2.25A1.75 1.75 0 0 1 .5 18.25V7.75C.5 6.784 1.284 6 2.25 6zm.309 2.24l7.984 5.989a2.5 2.5 0 0 0 2.914 0l7.984-5.989A.256.256 0 0 0 21.36 8H2.64c-.218 0-.332.228-.081.24zM22.5 9.771l-8.498 6.374a4.001 4.001 0 0 1-4.804-.085L2.5 9.873V18.25c0 .138.112.25.25.25h18.5a.25.25 0 0 0 .25-.25V9.771z"/>', url: `mailto:?subject=${encodedTitle}&body=${encodedUrl}` }
-    ];
-
-    const overlay = document.createElement('div');
-    overlay.className = 'share-dialog-overlay';
-    overlay.id = 'custom-share-overlay';
-
-    overlay.innerHTML = `
-      <div class="share-dialog">
-        <div class="share-dialog-header">
-          <div class="share-dialog-title">
-            <div class="share-dialog-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-              </svg>
-            </div>
-            <div class="share-dialog-text">
-              <h3>Share Sound</h3>
-              <p>${title}</p>
-            </div>
-          </div>
-          <button class="share-close-btn" id="close-share-overlay">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        
-        <div class="share-grid">
-          ${shareOptions.map(option => `
-            <a href="${option.url}" class="share-item" target="_blank" rel="noopener noreferrer">
-              <div class="share-item-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  ${option.icon}
-                </svg>
-              </div>
-              <span class="share-item-label">${option.name}</span>
-            </a>
-          `).join('')}
-        </div>
-
-        <div class="share-footer">
-          <div class="copy-link-container">
-            <span class="copy-link-label">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              Copy Link
-            </span>
-            <div class="copy-input-wrapper">
-              <input type="text" class="share-url-input" value="${url}" readonly />
-              <button class="copy-btn" id="share-copy-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                Copy
-              </button>
-            </div>
-          </div>
-
-          <button class="native-share-btn" id="native-share-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="18" cy="5" r="3"></circle>
-              <circle cx="6" cy="12" r="3"></circle>
-              <circle cx="18" cy="19" r="3"></circle>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg>
-            Share via Device
-          </button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
-
-    // Animation frame to allow transitions
-    requestAnimationFrame(() => {
-      overlay.classList.add('active');
-    });
-
-    // Event Listeners
-    const closeBtn = document.getElementById('close-share-overlay');
-    const copyBtn = document.getElementById('share-copy-btn');
-    const nativeShareBtn = document.getElementById('native-share-btn');
-    const urlInput = overlay.querySelector('.share-url-input');
-
-    const close = () => {
-      overlay.classList.remove('active');
-      setTimeout(() => overlay.remove(), 200);
-    };
-
-    closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) close();
-    });
-
-    copyBtn.addEventListener('click', async () => {
-      urlInput.select();
-      urlInput.setSelectionRange(0, 99999); // For mobile devices
-
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(url);
-        } else {
-            throw new Error('Clipboard API unavailable');
-        }
-      } catch (err) {
-        // Fallback for older browsers or non-secure contexts
-        try {
-          document.execCommand('copy');
-        } catch (e) {
-          console.error('Copy failed:', e);
-          return;
-        }
-      }
-      
-      // Success feedback
-      const originalText = copyBtn.innerHTML;
-      copyBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        Copied!
-      `;
-      copyBtn.style.background = '#2e7d32'; // Green
-      
-      setTimeout(() => {
-        copyBtn.innerHTML = originalText;
-        copyBtn.style.background = '';
-      }, 2000);
-    });
-
-    nativeShareBtn.addEventListener('click', () => {
-      if (navigator.share) {
-        navigator.share({
-          title: title,
-          url: url
-        }).catch(console.error);
-        close();
-      } else {
-        copyBtn.click();
-      }
     });
   }
 
