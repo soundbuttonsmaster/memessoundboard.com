@@ -1,0 +1,139 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="contact-us-section">
+        <div class="contact-us-container">
+          <h1>Contact Us</h1>
+          <p>
+            We'd love to hear from you! For questions, feedback, or support, email us at
+            <a href="mailto:play@soundbuttons.com">play@MemesSoundBoard</a> or use the form below.
+          </p>
+
+          <div class="contact-form-card">
+            <form>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" />
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message"></textarea>
+              </div>
+              <button type="submit" class="send-message-btn">Send Message</button>
+            </form>
+          </div>
+
+          <p class="email-direct">
+            Or email us directly at <a href="mailto:play@soundbuttons.com">play@MemesSoundBoard</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .contact-us-section {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: sans-serif;
+  }
+
+  .contact-us-container h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .contact-us-container p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  .contact-us-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .contact-us-container a:hover {
+    text-decoration: underline;
+  }
+
+  .contact-form-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+
+  .form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .send-message-btn {
+    background-color: #343a40;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .send-message-btn:hover {
+    background-color: #23272b;
+  }
+
+  .email-direct {
+    text-align: center;
+    font-size: 1em;
+    color: #555;
+  }
+</style>

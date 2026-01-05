@@ -1,0 +1,497 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SoundButton from '../components/SoundButton.astro';
+import { fetchNewSounds, fetchTrendingSounds, fetchUserFavorites, getAuthToken } from '../lib/api';
+
+// Fetch sounds data - 44 for desktop (11x4), 16 for mobile (4x4)
+const newSounds = await fetchNewSounds(44);
+const trendingSounds = await fetchTrendingSounds(44);
+
+// Note: Server-side favorites fetching removed since localStorage is not available server-side
+// The SoundButton components will fetch favorites client-side instead
+
+// SEO Meta Data
+const pageTitle = 'Meme Soundboard: 100k+ Sound Buttons Unblocked';
+const pageDescription = 'Explore thousands of sound buttons including prank sounds, meme buttons, and funny sound effects with high-quality audio on unblocked meme soundboard.';
+const pageKeywords = 'sound buttons, meme soundboard, unblocked soundboard, prank sounds, sound effects, meme buttons, soundboard unblocked';
+const canonicalUrl = 'https://MemesSoundBoard/';
+const ogImage = '/images/og-image.jpg';
+const h1Title = 'Meme Soundboard Unblocked: Explore Large Collection of Sound Buttons ';
+const shortDescription = 'MemesSoundBoard is your ultimate destination for unblocked meme soundboard, sound buttons, prank, sound effects, and thousands of viral sounds you can play, create and share instantly.';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
+    <meta name="author" content="MemesSoundBoard" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="MemesSoundBoard" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    
+    <!-- Additional SEO Tags -->
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "MemesSoundBoard",
+      "description": shortDescription,
+      "url": canonicalUrl,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://MemesSoundBoard/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "MemesSoundBoard",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://MemesSoundBoard/images/logo.png"
+        }
+      }
+    })} />
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+    
+    <main class="main-content">
+
+    <!-- Main Title and Description -->
+      <div class="hero-section">
+        <h1 class="main-title">Meme Soundboard Unblocked: Explore Large Collection of Sound Buttons </h1>
+        <p class="main-description">
+          Discover the ultimate meme soundboard unblocked collection with hilarious sound buttons, sound effects and meme buttons. Create your own soundboard & sound buttons easily on mobile, desktop, Chromebook or tablet.
+        </p>
+      </div>
+      
+      <!-- New Sounds Section -->
+      <section class="sounds-section">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <h2 class="section-title">Meme Soundboard : New Sound Button</h2>
+          </div>
+          <a href="/new" class="see-all-button">
+            See All
+            <span class="see-all-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+        <hr class="section-divider" />
+        <div class="sounds-grid" id="sounds-grid-new">
+          {newSounds.results && newSounds.results.length > 0 ? (
+            newSounds.results.map((sound) => (
+              <SoundButton sound={sound} />
+            ))
+          ) : (
+            <p class="no-sounds">No new sounds available at the moment.</p>
+          )}
+        </div>
+        {newSounds.next && (
+          <div class="load-more-container">
+            <button class="load-more-button" data-next-url={newSounds.next} data-target="sounds-grid-new">
+              Load More
+            </button>
+          </div>
+        )}
+        <div class="explore-more-container">
+          <a href="/new" class="explore-more-button">
+            Explore More New Sounds
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- Trending Sounds Section -->
+      <section class="sounds-section">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <h2 class="section-title">Meme Soundboard  : Trending Sound Button</h2>
+          </div>
+          <a href="/trending" class="see-all-button">
+            See All
+            <span class="see-all-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+        <hr class="section-divider" />
+        <div class="sounds-grid" id="sounds-grid-trending">
+          {trendingSounds.results && trendingSounds.results.length > 0 ? (
+            trendingSounds.results.map((sound) => (
+              <SoundButton sound={sound} />
+            ))
+          ) : (
+            <p class="no-sounds">No trending sounds available at the moment.</p>
+          )}
+        </div>
+        {trendingSounds.next && (
+          <div class="load-more-container">
+            <button class="load-more-button" data-next-url={trendingSounds.next} data-target="sounds-grid-trending">
+              Load More
+            </button>
+          </div>
+        )}
+        <div class="explore-more-container">
+          <a href="/trending" class="explore-more-button">
+            Explore More Trending Sounds
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+<script>
+  const API_BASE_URL = 'http://play.soundboard.cloud/api/SoundBoard.soundbuttons.com';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreButtons = document.querySelectorAll('.load-more-button');
+
+    loadMoreButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const nextUrl = button.getAttribute('data-next-url');
+        const targetId = button.getAttribute('data-target');
+        const grid = document.getElementById(targetId);
+
+        if (!nextUrl || !grid) return;
+
+        // Set loading state
+        const originalText = button.textContent;
+        button.textContent = 'Loading...';
+        button.disabled = true;
+
+        try {
+          const response = await fetch(nextUrl);
+          if (!response.ok) throw new Error('Network response was not ok');
+          
+          const data = await response.json();
+          const results = data.results || data.data || []; // Handle different response structures if any
+          const newNextUrl = data.next;
+
+          // Helper to create slug (duplicated from SoundButton to ensure consistency)
+          function slugify(text) {
+              return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+          }
+
+          // Generate HTML for new sounds
+          // NOTE: This must match SoundButton.astro structure exactly!
+          const newHtml = results.map(sound => {
+            const buttonColor = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF', '#33FFF5', '#F5FF33'][sound.id % 7];
+            const isFavorited = sound.is_favorited; // Assuming API returns this context if auth token was used, but simpler handling here
+            
+            return `
+              <div class="instant">
+                <div 
+                  class="sprite-wrapper" 
+                  data-audio-url="${API_BASE_URL}/sounds/${sound.id}/audio" 
+                  data-sound-id="${sound.id}"
+                >
+                  <div 
+                    class="inner-btn" 
+                    style="background: ${buttonColor};"
+                  ></div>
+                  <div class="button-ring"></div>
+                </div>
+                
+                <a href="/instant/${slugify(sound.name)}-${sound.id}" class="instant-link link-secondary" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">${sound.name}</a>
+                
+                <div class="result-page-instant-sharebox">
+                  <button type="button" class="instant-action-button favorite-btn" data-sound-id="${sound.id}" title="Add ${sound.name} to favorites">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${isFavorited ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" style="font-size: 1.3rem; color: red;">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="instant-action-button webshare" data-sound-id="${sound.id}" title="Share ${sound.name}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="font-size: 1.3rem; color: cornflowerblue;">
+                      <circle cx="18" cy="5" r="3"/>
+                      <circle cx="6" cy="12" r="3"/>
+                      <circle cx="18" cy="19" r="3"/>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                  </button>
+                  <a href="${API_BASE_URL}/sounds/${sound.id}/audio?download=true" download="${sound.name}" class="instant-action-button download-btn" title="Download ${sound.name}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="font-size: 1.3rem; color: #2ECC71;">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          // Append new sounds
+          grid.insertAdjacentHTML('beforeend', newHtml);
+
+          // Re-initialize buttons
+          if (window.SoundBoard) {
+            window.SoundBoard.initAllSoundButtons();
+            window.SoundBoard.initActionButtons();
+          }
+
+          // Update button state
+          if (newNextUrl) {
+            button.setAttribute('data-next-url', newNextUrl);
+            button.textContent = originalText;
+            button.disabled = false;
+          } else {
+            button.remove(); // No more pages
+          }
+
+        } catch (error) {
+          console.error('Error loading more sounds:', error);
+          button.textContent = 'Error - Try Again';
+          button.disabled = false;
+        }
+      });
+    });
+  });
+</script>
+
+      <!-- About Section -->
+      <section class="about-section">
+        <!-- Hero Introduction -->
+        <div class="about-hero">
+          <div class="hero-content">
+            <h2>Memes Soundboard with Thousands of Sound Buttons Unblocked</h2>
+            <p class="hero-description">Welcome to Memes Soundboard is the best place to find free meme soundboard games! You can find more than <a href="https://soundbuttons.com" target="_blank">100,000 funny sound buttons<a/>, viral meme audio clips, and classic sound effects right at your fingertips. Our soundboard-unblocked platform lets you play back right away on any device without having to download anything or sign up.</p>
+          </div>
+        </div>
+
+        <!-- Library Section -->
+        <div class="about-content-section">
+          <div class="content-wrapper">
+            <h3>Explore the Library of Sound Buttons.</h3>
+            <p>Check out a <a href="https://soundbuttonsmax.com target="_blank">huge library of sound buttons</a> that cover popular memes, old pranks, viral audio clips, and everyday reactions. All of the sound buttons are set up for high-quality audio and instant playback, so you won't have to wait for anything to happen. Regularly adding new sounds keeps the soundboard fresh and in line with the latest trends on the internet. No matter if you want loud, funny, or perfectly timed reaction sounds, you'll always find the right button here.</p>
+          </div>
+        </div>
+
+        <!-- Why Choose Us Section -->
+        <div class="about-features-section">
+          <div class="features-wrapper">
+            <h3>Why should you choose MemesSoundboard.com?</h3>
+            <p class="features-intro">Get ready for a seamless <a href="https://soundboard.soundbuttons.com/" target="_blank">meme soundboard<a/> experience that will keep you entertained:</p>
+
+            <div class="features-list">
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>Instant Playback</h4>
+                  <p>Click or tap any sound button to hear it right away.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>High-Quality Sound</h4>
+                  <p>Sound effects and meme buttons that are crystal clear</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>Mobile Friendly</h4>
+                  <p>Works great on tablets, smartphones, and desktops</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>Share Anywhere</h4>
+                  <p>Send meme buttons straight to social media sites</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>Download Option</h4>
+                  <p>Save your favorite sounds to listen to later.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-content">
+                  <h4>No need to sign up</h4>
+                  <p>You can start playing right away without signing up.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Soundboards Section -->
+        <div class="about-content-section">
+          <div class="content-wrapper">
+            <h3>Make Soundboards and add your own Sounds.</h3>
+            <p>Make your own soundboard and upload sounds with ease. You can add your favorite audio clips, arrange them however you want, and listen to them whenever you want. This feature is great for streamers, content creators, and editors who want to quickly get to the sound effects they use the most. Make a soundboard that you like to play sounds daily.</p>
+          </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="about-categories-section">
+          <div class="categories-wrapper">
+            <h3>Different Types of Soundboards</h3>
+            <p class="categories-intro">Use our organized meme soundboard categories to quickly find the right sound buttons:</p>
+
+            <div class="categories-grid">
+              <a href="/memes/914" class="category-item category-link">
+                <div class="category-icon">😄</div>
+                <div class="category-content">
+                  <h4>Memes</h4>
+                  <p>Funny sounds and popular audio clips that spread quickly and make people laugh in chats, videos, and memes.</p>
+                </div>
+              </a>
+              <a href="/movies/915" class="category-item category-link">
+                <div class="category-icon">🎬</div>
+                <div class="category-content">
+                  <h4>Movies</h4>
+                  <p>Famous lines, scenes, and sound clips from movies and TV shows.</p>
+                </div>
+              </a>
+              <a href="/games/913" class="category-item category-link">
+                <div class="category-icon">🎮</div>
+                <div class="category-content">
+                  <h4>Gaming</h4>
+                  <p>Sounds, alerts, and reactions that gamers and streamers like.</p>
+                </div>
+              </a>
+              <a href="/pranks/919" class="category-item category-link">
+                <div class="category-icon">😈</div>
+                <div class="category-content">
+                  <h4>Prank</h4>
+                  <p>These are lighthearted ways to pull pranks on people by making them laugh, getting a reaction from them and surprising them at any moment.</p>
+                </div>
+              </a>
+              <a href="/creativity/912" class="category-item category-link">
+                <div class="category-icon">🎵</div>
+                <div class="category-content">
+                  <h4>Sound Effects</h4>
+                  <p>Game sound effects alerting players and reacting to them from various games created specifically so that streamers and gamers have fun using them.</p>
+                </div>
+              </a>
+              <a href="/reactions/910" class="category-item category-link">
+                <div class="category-icon">💬</div>
+                <div class="category-content">
+                  <h4>Reaction</h4>
+                  <p>Quick sounds that make memes, conversations, and moments more fun.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unblocked Access Section -->
+        <div class="about-unblocked-section">
+          <div class="unblocked-wrapper">
+            <h3>Soundboard Unblocked on All Devices</h3>
+            <p class="unblocked-description">Enjoy completely <a href="https://soundboardunblocked.com/" target="_blank">unblocked meme soundboard</a> access anywhere, anytime! Our platform works perfectly in schools, offices, libraries, and public networks where other entertainment sites might be restricted.</p>
+            <div class="unblocked-highlight">
+              <p>Millions of users have made Meme Soundboard their go-to place for sound buttons, pranks, and viral meme sounds. Whether making epic content, pranking friends, enhancing a stream, or just getting a laugh, we've got the sounds you can use to make every moment memorable.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+        <div class="section-container faq-section">
+          <div class="section-title-centered">
+            <h3>Frequently Asked Questions</h3>
+          </div>
+
+          <div class="faq-accordion">
+            <details class="faq-item">
+              <summary>
+                <span>Is the meme soundboard free?</span>
+                <span class="icon">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Yes! All sound buttons are free to play, share, and download.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>Do I need to download anything?</span>
+                <span class="icon">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>No downloads required. Everything works directly in your browser.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>Can I use it on mobile and desktop?</span>
+                <span class="icon">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Yes, the meme soundboard works perfectly on all devices.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>Can I add my own sounds?</span>
+                <span class="icon">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Yes, you can make your own soundboards and upload your own audio.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <Footer />
+
+  </body>
+</html>
+

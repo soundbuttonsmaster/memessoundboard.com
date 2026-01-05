@@ -1,0 +1,1043 @@
+---
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SoundButton from '../../components/SoundButton.astro';
+import { fetchSoundById, fetchSounds, API_BASE_URL } from '../../lib/api';
+
+// Helper function to create URL-friendly slugs
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+}
+
+export async function getStaticPaths() {
+  // Helper function to create URL-friendly slugs
+  function slugify(text: string): string {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+  }
+
+  const paths = [];
+  let page = 1;
+  let hasMore = true;
+  const pageSize = 100; // Fetch 100 sounds per page
+
+  // Fetch all sounds in batches
+  while (hasMore) {
+    const soundsData = await fetchSounds({ 
+      page, 
+      page_size: pageSize 
+    });
+
+    if (soundsData.results && soundsData.results.length > 0) {
+      soundsData.results.forEach((sound) => {
+        const slug = slugify(sound.name);
+        // Combine name and id into single parameter: name-id
+        paths.push({
+          params: { 
+            slug: `${slug}-${sound.id}` 
+          }
+        });
+      });
+
+      // Check if there are more pages
+      hasMore = soundsData.next !== null;
+      page++;
+    } else {
+      hasMore = false;
+    }
+
+    // Safety limit to prevent infinite loops
+    if (page > 1000) {
+      break;
+    }
+  }
+
+  return paths;
+}
+
+// Parse the slug parameter (format: name-id)
+const slug = Astro.params.slug || '';
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+// Extract ID from the end (last number after last dash)
+const parts = slug.split('-');
+const lastPart = parts[parts.length - 1];
+const soundId = parseInt(lastPart);
+
+if (isNaN(soundId)) {
+  return Astro.redirect('/404');
+}
+
+// Reconstruct the name part (everything except the last part)
+const name = parts.slice(0, -1).join('-');
+
+// Fetch sound data
+const sound = await fetchSoundById(soundId);
+
+if (!sound) {
+  console.error(`Sound not found for ID: ${soundId}, slug: ${slug}`);
+  return Astro.redirect('/404');
+}
+
+// Verify the slug matches (redirect if not)
+const expectedSlug = slugify(sound.name);
+const expectedFullSlug = `${expectedSlug}-${soundId}`;
+if (slug !== expectedFullSlug) {
+  // Redirect to correct URL if slug doesn't match
+  return Astro.redirect(`/instant/${expectedFullSlug}`, 301);
+}
+
+// Fetch related sounds (same category or similar tags)
+const relatedSounds = await fetchSounds({ 
+  category: sound.category_id || undefined,
+  page_size: 20 
+});
+
+// Filter out the current sound from related sounds
+const filteredRelatedSounds = relatedSounds.results.filter(s => s.id !== sound.id).slice(0, 18);
+
+// SEO Meta Data
+const soundName = sound.name || 'Sound Button';
+const pageTitle = `${soundName} Sound Effect Buttons | Meme Soundboard`;
+const pageDescription = `Play and download ${soundName}  sound effect buttons online from our soundboard collection! Perfect for memes, pranks, gaming, streaming, and fun reactions.`;
+const pageKeywords = `${soundName.toLowerCase()}, sound button, meme soundboard, sound effect, prank sound, viral sound, ${sound.category_name ? sound.category_name.toLowerCase() : ''}`;
+const canonicalUrl = `https://MemesSoundBoard/instant/${slug}`;
+const ogImage = '/images/og-image.jpg';
+
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
+    <meta name="author" content="MemesSoundBoard" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="MemesSoundBoard" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    
+    <!-- Additional SEO Tags -->
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "AudioObject",
+      "name": soundName,
+      "description": pageDescription,
+      "contentUrl": sound.sound_file,
+      "url": canonicalUrl,
+      "encodingFormat": "audio/mpeg",
+      "duration": "PT0S"
+    })} />
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+    
+    <main class="main-content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs-simple" aria-label="Breadcrumb">
+        <ol class="breadcrumb-simple-list">
+          <li class="breadcrumb-simple-item">
+            <a href="/">MemesSoundBoard</a>
+          </li>
+          <li class="breadcrumb-separator">></li>
+          <li class="breadcrumb-simple-item">
+            <a href="/">Sounds</a>
+          </li>
+          {sound.category_id && sound.category_name && (
+            <>
+              <li class="breadcrumb-separator">></li>
+              <li class="breadcrumb-simple-item">
+                <a href={`/${slugify(sound.category_name)}/${sound.category_id}`}>
+                  {sound.category_name}
+                </a>
+              </li>
+            </>
+          )}
+          <li class="breadcrumb-separator">></li>
+          <li class="breadcrumb-simple-item breadcrumb-active">
+            {soundName.toUpperCase()}
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Main Sound Detail Section -->
+      <section class="sound-detail-simple">
+        <div class="sound-detail-wrapper">
+          <!-- Main Title -->
+          <h1 class="sound-detail-title">{soundName.toUpperCase()}</h1>
+          
+          <!-- Sound Button -->
+          <div class="sound-button-center sound-detail-section">
+            <SoundButton sound={sound} />
+          </div>
+          
+          <!-- Sound Name/Identifier -->
+          {sound.tag && (
+            <div class="sound-identifier">{sound.tag}</div>
+          )}
+
+          
+          <!-- Engagement Metrics -->
+          <div class="sound-metrics-simple">
+            {sound.favorites_count !== undefined && (
+              <p class="metric-line">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                {sound.favorites_count.toLocaleString()} users favorited this sound button
+              </p>
+            )}
+            {sound.views !== undefined && (
+              <p class="metric-line">
+                {sound.views.toLocaleString()} views
+              </p>
+            )}
+          </div>
+
+          <!-- Description -->
+          <div class="sound-description">
+            <p class="sound-description-text">
+              Play and download the {soundName} sound effect buttons instantly! Ideal for memes, pranks, gaming, editing, and sharing fun moments with everyone.
+            </p>
+          </div>
+
+          <!-- Action Buttons Grid -->
+          <div class="action-buttons-simple">
+            <button class="action-btn-simple favorite-btn" data-sound-id={sound.id}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              Add to my soundboard
+            </button>
+            <button type="button" class="action-btn-simple webshare" data-sound-id={sound.id}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              Share
+            </button>
+            <button class="action-btn-simple copy-link-btn" data-sound-id={sound.id} data-sound-url={canonicalUrl}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              Copy link
+            </button>
+            <button class="action-btn-simple report-btn" data-sound-id={sound.id}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              Report
+            </button>
+            <a href={`${API_BASE_URL}/sounds/${sound.id}/audio?download=true`} download={sound.name} class="action-btn-simple download-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download MP3
+            </a>
+            <button class="action-btn-simple install-app-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+              </svg>
+              Install MemesSoundBoard App
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Related Sounds Section -->
+      {filteredRelatedSounds.length > 0 && (
+        <section class="sounds-section">
+          <div class="section-header">
+            <div class="section-title-wrapper">
+              <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                You might also like
+              </h2>
+            </div>
+          </div>
+          <div class="sounds-grid related-sounds-section">
+            {filteredRelatedSounds.map((relatedSound) => (
+              <SoundButton sound={relatedSound} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+
+    <Footer />
+
+    <script define:vars={{ soundId: sound.id, soundName: sound.name }}>
+      // Helper function to create slug from name
+      function slugify(text) {
+        return text
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/[\s_-]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const soundUrl = window.location.href;
+
+        // Like button
+        const likeBtn = document.getElementById('likeBtn');
+        likeBtn?.addEventListener('click', async () => {
+          // TODO: Implement like functionality with API
+          console.log('Like sound:', soundId);
+          likeBtn.classList.toggle('active');
+        });
+
+
+        // Action buttons
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // TODO: Implement favorite functionality
+            console.log('Favorite sound:', soundId);
+            btn.classList.toggle('active');
+          });
+        });
+
+        document.querySelectorAll('.webshare').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const soundId = btn.getAttribute('data-sound-id');
+            // Helper to create slug
+            function slugify(text) {
+              return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+            }
+            const soundName = btn.closest('.sound-detail-section')?.querySelector('.sound-detail-title')?.textContent?.toLowerCase() || '';
+            const url = `${window.location.origin}/instant/${slugify(soundName)}-${soundId}`;
+
+            // Show the new custom share dialog
+            showCustomShareDialog(url, soundName);
+          });
+        });
+
+        document.querySelectorAll('.download-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Visual feedback - Start
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+            `;
+            btn.style.pointerEvents = 'none'; // Prevent double clicks
+
+            const url = btn.getAttribute('href');
+            const filename = btn.getAttribute('download') || 'sound.mp3';
+
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+
+                // Reset button state on success
+                btn.innerHTML = originalHtml;
+                btn.style.pointerEvents = '';
+
+            } catch (err) {
+                console.error('Fetch download failed, falling back to direct link:', err);
+
+                // Fallback: Create invisible iframe to trigger download
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = url;
+                document.body.appendChild(iframe);
+
+                // Clean up after a delay
+                setTimeout(() => {
+                  document.body.removeChild(iframe);
+                  btn.innerHTML = originalHtml;
+                  btn.style.pointerEvents = '';
+                }, 2000);
+            }
+          });
+        });
+
+        document.querySelectorAll('.copy-link-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            console.log('Copy link button clicked');
+            const url = btn.getAttribute('data-sound-url') || window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+              console.log('Link copied successfully:', url);
+              // Visual feedback - show "Copied!" temporarily
+              const originalHtml = btn.innerHTML;
+              const originalBackground = btn.style.backgroundColor;
+
+              // Add copied state class
+              btn.classList.add('copied-state');
+              btn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Copied!
+              `;
+
+              // Show success message
+              showCopySuccessMessage();
+
+              // Reset after 2 seconds
+              setTimeout(() => {
+                btn.classList.remove('copied-state');
+                btn.innerHTML = originalHtml;
+              }, 2000);
+            }).catch(err => {
+              console.error('Failed to copy link:', err);
+              // Fallback: show alert if clipboard API fails
+              alert('Failed to copy link. Please try again.');
+            });
+          });
+        });
+
+        document.querySelectorAll('.report-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // TODO: Implement report functionality
+            alert('Report feature coming soon!');
+          });
+        });
+
+        document.querySelectorAll('.install-app-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // TODO: Implement app install
+            alert('App install feature coming soon!');
+          });
+        });
+      });
+
+// Helper function to copy instant link (matches SoundButton component)
+function copyInstantLink(url, soundId) {
+  navigator.clipboard.writeText(url).then(() => {
+    // Logic for tooltip or notification could go here
+  });
+}
+
+// Show success message when link is copied
+function showCopySuccessMessage() {
+  // Remove existing toast if any
+  const existingToast = document.getElementById('copy-success-toast');
+  if (existingToast) {
+    existingToast.remove();
+  }
+
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.id = 'copy-success-toast';
+  toast.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #34a853;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 10000;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideInRight 0.3s ease;
+    ">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Link copied to clipboard!
+    </div>
+  `;
+
+  document.body.appendChild(toast);
+
+  // Remove toast after 3 seconds
+  setTimeout(() => {
+    if (toast.parentNode) {
+      toast.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 300);
+    }
+  }, 3000);
+}
+
+// Create and show custom share dialog
+function showCustomShareDialog(url, title) {
+  // Remove existing dialog if any
+  const existing = document.getElementById('custom-share-overlay');
+  if (existing) existing.remove();
+
+  const encodedUrl = encodeURIComponent(url);
+
+  const shareOptions = [
+    {
+      name: 'WhatsApp',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/></svg>`,
+      url: `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`
+    },
+    {
+      name: 'Telegram',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-1.911-1.277-2.539-2.044-.635-.77-.263-1.155.22-1.779.265-.333.587-.683.917-.937.417-.323.85-.445 1.047-.445.15 0 .283.01.386.04.149.044.236.125.253.253.018.124-.05.246-.253.37-.176.122-.345.245-.52.372-.705.52-1.244.895-1.244 1.654 0 .72.513 1.2 1.183 1.513.398.195.807.37 1.22.532.824.322 1.653.64 2.475.89.805.244 1.612.522 2.158.806.528.274.884.587.884 1.15 0 .57-.476 1.022-1.149 1.042-.37.013-.848-.152-1.407-.443-.552-.287-1.245-.63-2.05-.965-.807-.337-1.616-.663-2.365-.98-.742-.316-1.488-.65-2.017-.995-.518-.34-.857-.666-.857-1.095 0-.403.27-.75.756-.956.194-.082.39-.14.59-.187.164-.038.32-.063.467-.08.573-.067 1.148-.13 1.72-.195.698-.08 1.39-.165 2.066-.255 1.344-.18 2.624-.43 3.703-.675.96-.22 1.74-.47 2.276-.74.528-.26.846-.56.846-.91 0-.345-.194-.64-.545-.904-.364-.28-.85-.5-1.39-.658-.556-.17-1.125-.32-1.697-.45-.59-.135-1.184-.27-1.768-.405-.585-.135-1.17-.27-1.744-.405z"/></svg>`,
+      url: `https://t.me/share/url?url=${encodedUrl}&text=${encodeURIComponent(title)}`
+    },
+    {
+      name: 'Facebook',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+    },
+    {
+      name: 'Twitter',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>`,
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodedUrl}`
+    },
+    {
+      name: 'Reddit',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 3.48 3.492 0 2.822-2.034 4.79-6.357 4.79-4.322 0-6.357-1.968-6.357-4.79 0-2.861 1.654-3.421 3.478-3.493l.8-3.746-2.596.547a1.25 1.25 0 0 1 .049-2.498c.689 0 1.25.561 1.25 1.25 0 .227-.037.45-.11.656l2.981-.623-.489 2.317c.475-.056.952-.095 1.43-.095.48 0 .955.04 1.43.095l-.49-2.317 2.982.624c-.073-.207-.11-.43-.11-.657 0-.689.562-1.25 1.25-1.25zM9.355 8.435c-.486 0-.878.392-.878.878s.392.878.878.878.878-.392.878-.878-.392-.878-.878-.878zm5.29 0c-.486 0-.878.392-.878.878s.392.878.878.878.878-.392.878-.878-.392-.878-.878-.878zm-3.646 4.809c-.696 0-1.225.588-1.302 1.315a1.286 1.286 0 0 0 .048.14c.05.119.145.244.283.352.21.162.46.271.726.318.392.068.785-.017 1.126-.184.288-.143.52-.378.645-.666.14-.31.175-.666.128-1.018-.05-.39-.213-.75-.488-1.023-.293-.293-.694-.44-1.113-.44z"/></svg>`,
+      url: `https://reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent(title)}`
+    },
+    {
+      name: 'LinkedIn',
+      icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+    }
+  ];
+
+  const dialogHtml = `
+    <div id="custom-share-overlay" class="share-dialog-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+      <div class="share-dialog" style="background: white; width: 100%; max-width: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="share-dialog-header" style="padding: 16px 20px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #eee;">
+          <div class="share-dialog-title" style="display: flex; align-items: center; gap: 12px;">
+            <div class="share-dialog-icon" style="width: 40px; height: 40px; background: #e8f0fe; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #1a73e8;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </div>
+            <div class="share-dialog-text">
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Share Sound</h3>
+              <p style="margin: 2px 0 0; font-size: 14px; color: #666;">${title}</p>
+            </div>
+          </div>
+          <button class="share-close-btn" style="background: none; border: none; cursor: pointer; padding: 4px; color: #666; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="share-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 24px 20px; overflow-y: auto;">
+          ${shareOptions.map(option => `
+            <a href="${option.url}" target="_blank" class="share-item" style="display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: 1px solid #eee; border-radius: 8px; padding: 12px; text-decoration: none; color: inherit; transition: all 0.2s;">
+              <div class="share-item-icon" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: #666;">
+                ${option.icon}
+              </div>
+              <span class="share-item-label" style="font-size: 12px; font-weight: 500; color: #333;">${option.name}</span>
+            </a>
+          `).join('')}
+        </div>
+
+        <div class="share-footer" style="padding: 16px 20px; border-top: 1px solid #eee; display: flex; flex-direction: column; gap: 16px;">
+          <div class="copy-input-wrapper" style="display: flex; gap: 8px;">
+            <input type="text" class="share-url-input" value="${url}" readonly style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" />
+            <button class="copy-btn" style="padding: 10px 16px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s;">Copy</button>
+          </div>
+
+          ${navigator.share ? `
+            <button class="native-share-btn" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              More options
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', dialogHtml);
+
+  const overlay = document.getElementById('custom-share-overlay');
+  const dialog = overlay.querySelector('.share-dialog');
+
+  // Add active class with animation
+  setTimeout(() => {
+    overlay.classList.add('active');
+  }, 10);
+
+  // Close dialog
+  overlay.querySelector('.share-close-btn').addEventListener('click', () => {
+    overlay.classList.remove('active');
+    setTimeout(() => overlay.remove(), 300);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      setTimeout(() => overlay.remove(), 300);
+    }
+  });
+
+  // Copy link functionality
+  overlay.querySelector('.copy-btn').addEventListener('click', () => {
+    const input = overlay.querySelector('.share-url-input');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+      const btn = overlay.querySelector('.copy-btn');
+      const originalText = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.style.background = '#34a853';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '#1a73e8';
+      }, 2000);
+    });
+  });
+
+  // Native share functionality
+  const nativeShareBtn = overlay.querySelector('.native-share-btn');
+  if (nativeShareBtn) {
+    nativeShareBtn.addEventListener('click', async () => {
+      try {
+        await navigator.share({
+          title: title,
+          url: url
+        });
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 300);
+      } catch (err) {
+        console.log('Native share cancelled');
+      }
+    });
+  }
+}
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Simple Breadcrumbs */
+  .breadcrumbs-simple {
+    margin: 1.5rem 0 2rem;
+  }
+
+  .breadcrumb-simple-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .breadcrumb-simple-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb-simple-item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-simple-item a:hover {
+    color: var(--primary-color);
+  }
+
+  .breadcrumb-simple-item.breadcrumb-active {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .breadcrumb-separator {
+    color: var(--text-light);
+    font-size: 0.9rem;
+  }
+
+  /* Sound Detail Simple Layout */
+  .sound-detail-simple {
+    margin: 3rem 0 4rem;
+  }
+
+  .sound-detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .sound-detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .sound-button-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+  }
+
+  /* Hide title and icons on detail page - use :global to target child component */
+  .sound-button-center :global(.instant-link.link-secondary) {
+    display: none !important;
+  }
+
+  .sound-button-center :global(.result-page-instant-sharebox) {
+    display: none !important;
+  }
+
+  /* Make sound button 3x larger on detail page */
+  .sound-button-center :global(.instant) {
+    width: 330px !important;
+  }
+
+  .sound-button-center :global(.sprite-wrapper) {
+    width: 330px !important;
+    height: 330px !important;
+  }
+
+  .sound-button-center :global(.button-ring-svg) {
+    width: 330px !important;
+    height: 330px !important;
+  }
+
+  .sound-button-center :global(.button-svg) {
+    width: 330px !important;
+    height: 330px !important;
+  }
+
+  .sound-button-center :global(.inner-btn) {
+    width: 291px !important;
+    height: 282px !important;
+  }
+
+  .sound-identifier {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 1rem 0;
+    font-weight: 500;
+  }
+
+  .sound-metrics-simple {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .metric-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .metric-line svg {
+    width: 16px;
+    height: 16px;
+    color: #E74C3C;
+    fill: #E74C3C;
+  }
+
+  /* Action Buttons Grid */
+  .action-buttons-simple {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 700px;
+    margin-top: 2rem;
+  }
+
+  .action-btn-simple {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--bg-light);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .action-btn-simple svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke: currentColor;
+  }
+
+  .action-btn-simple:hover {
+    background: var(--border-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .action-btn-simple.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .action-btn-simple.active svg {
+    stroke: white;
+  }
+
+  .favorite-btn.active {
+    background: #E74C3C;
+  }
+
+  /* Copy button copied state */
+  .action-btn-simple.copied-state {
+    background: #34a853 !important;
+    color: white !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .action-btn-simple.copied-state svg {
+    stroke: white !important;
+  }
+    color: white;
+  }
+
+  .favorite-btn.active svg {
+    fill: white;
+    stroke: white;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sound-detail-title {
+      font-size: 1.75rem;
+    }
+
+    /* Make sound button 3x larger on mobile detail page too (75px * 3 = 225px) */
+    .sound-button-center :global(.instant) {
+      width: 225px !important;
+    }
+
+    .sound-button-center :global(.sprite-wrapper) {
+      width: 225px !important;
+      height: 225px !important;
+    }
+
+    .sound-button-center :global(.button-ring-svg) {
+      width: 225px !important;
+      height: 225px !important;
+    }
+
+    .sound-button-center :global(.button-svg) {
+      width: 225px !important;
+      height: 225px !important;
+    }
+
+    .sound-button-center :global(.inner-btn) {
+      width: 192px !important;
+      height: 192px !important;
+    }
+
+    .action-buttons-simple {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .action-btn-simple {
+      padding: 0.875rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .breadcrumb-simple-list {
+      font-size: 0.85rem;
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .action-buttons-simple {
+      grid-template-columns: 1fr;
+    }
+
+    .sound-detail-title {
+      font-size: 1.5rem;
+    }
+  }
+
+
+
+  /* Related sounds section - smaller than main */
+  .related-sounds-section .instant {
+    width: 80px;
+  }
+
+  .related-sounds-section .sprite-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .related-sounds-section .inner-btn {
+    width: 68px;
+    height: 65px;
+  }
+
+  .related-sounds-section .button-ring-svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .related-sounds-section .button-svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .related-sounds-section .inner-btn {
+    width: 68px;
+    height: 65px;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+
+
+    .related-sounds-section .instant {
+      width: 65px;
+    }
+
+    .related-sounds-section .sprite-wrapper {
+      width: 65px;
+      height: 65px;
+    }
+
+    .related-sounds-section .inner-btn {
+      width: 54px;
+      height: 52px;
+    }
+
+    .related-sounds-section .button-ring-svg {
+      width: 65px;
+      height: 65px;
+    }
+
+    .related-sounds-section .button-svg {
+      width: 65px;
+      height: 65px;
+    }
+
+    .related-sounds-section .inner-btn {
+      width: 54px;
+      height: 52px;
+    }
+  }
+</style>
+

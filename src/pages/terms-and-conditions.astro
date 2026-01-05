@@ -1,0 +1,244 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// SEO Meta Data
+const pageTitle = 'Terms and Conditions - MemesSoundBoard';
+const pageDescription = 'Read our terms and conditions to understand the rules and guidelines for using MemesSoundBoard.';
+const pageKeywords = 'terms and conditions, terms of service, user agreement, MemesSoundBoard';
+const canonicalUrl = 'https://MemesSoundBoard/terms-and-conditions';
+const ogImage = '/images/og-image.jpg';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
+    <meta name="author" content="MemesSoundBoard" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Terms and Conditions",
+      "description": pageDescription,
+      "url": canonicalUrl
+    })} />
+
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Terms and Conditions</h1>
+        <p class="page-subtitle">Last Updated: January 5, 2026</p>
+      </div>
+
+      <section class="legal-section">
+        <div class="legal-container">
+          <section class="policy-section">
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing and using MemesSoundBoard ("the Service"), you accept and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our Service.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>2. Use of Service</h2>
+
+            <h3>2.1 Permitted Use</h3>
+            <p>You may use MemesSoundBoard for personal, non-commercial entertainment purposes. You agree to use the Service in compliance with all applicable laws and regulations.</p>
+
+            <h3>2.2 Prohibited Activities</h3>
+            <ul>
+              <li>Uploading malicious content or viruses</li>
+              <li>Attempting to gain unauthorized access to our systems</li>
+              <li>Harassing or abusing other users</li>
+              <li>Uploading content that infringes on copyrights or intellectual property</li>
+              <li>Using the Service for illegal purposes</li>
+              <li>Scraping or automated data collection without permission</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>3. User Accounts</h2>
+            <p>If you create an account, you are responsible for maintaining the security of your account and password. You agree to accept responsibility for all activities that occur under your account. We reserve the right to terminate accounts that violate these terms.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>4. User Content</h2>
+            <p>By uploading content to MemesSoundBoard, you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content on our platform. You represent that:</p>
+            <ul>
+              <li>You own or have the right to upload the content</li>
+              <li>The content does not violate any laws or third-party rights</li>
+              <li>The content does not contain hate speech, harassment, or illegal material</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>5. Intellectual Property</h2>
+            <p>The Service and its original content, features, and functionality are owned by MemesSoundBoard and are protected by international copyright, trademark, and other intellectual property laws. Sound content on the platform may be owned by third parties and is provided for entertainment purposes.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>6. Copyright and DMCA</h2>
+            <p>We respect intellectual property rights. If you believe your copyright has been infringed, please review our DMCA Policy and contact us at contact@MemesSoundBoard.com.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>7. Disclaimer of Warranties</h2>
+            <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR SECURE.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>8. Limitation of Liability</h2>
+            <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, MEMESSOUNDBOARD SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM YOUR USE OF THE SERVICE.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>9. Indemnification</h2>
+            <p>You agree to indemnify and hold harmless MemesSoundBoard from any claims, damages, losses, and expenses arising from your use of the Service or violation of these Terms.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>10. Modifications to Service and Terms</h2>
+            <p>We reserve the right to modify or discontinue the Service at any time without notice. We may also update these Terms and Conditions. Continued use of the Service after changes constitutes acceptance of the new terms.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>11. Governing Law</h2>
+            <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law provisions.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>12. Contact Information</h2>
+            <p>For questions about these Terms and Conditions, please contact us at contact@MemesSoundBoard.com</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .legal-section {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: sans-serif;
+  }
+
+  .legal-container h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .legal-container .page-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: normal;
+  }
+
+  .legal-container .policy-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-container .policy-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container .policy-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  .legal-container .policy-section p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .legal-container .policy-section ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .legal-container .policy-section li {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .legal-container a:hover {
+    text-decoration: underline;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .legal-section {
+      padding: 20px 15px;
+    }
+
+    .legal-container h1 {
+      font-size: 2rem;
+    }
+
+    .legal-container .policy-section h2 {
+      font-size: 1.3rem;
+    }
+  }
+</style>

@@ -1,0 +1,232 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// SEO Meta Data
+const pageTitle = 'DMCA Copyright Policy - MemesSoundBoard';
+const pageDescription = 'Learn about our DMCA copyright policy and how to report copyright infringement on MemesSoundBoard.';
+const pageKeywords = 'DMCA, copyright policy, copyright infringement, DMCA notice, MemesSoundBoard';
+const canonicalUrl = 'https://MemesSoundBoard/dmca';
+const ogImage = '/images/og-image.jpg';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
+    <meta name="author" content="MemesSoundBoard" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "DMCA Copyright Policy",
+      "description": pageDescription,
+      "url": canonicalUrl
+    })} />
+
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">DMCA Copyright Policy</h1>
+        <p class="page-subtitle">Last Updated: January 5, 2026</p>
+      </div>
+
+      <section class="legal-section">
+        <div class="legal-container">
+          <section class="policy-section">
+            <h2>1. Overview</h2>
+            <p>MemesSoundBoard respects the intellectual property rights of others and expects our users to do the same. In accordance with the Digital Millennium Copyright Act (DMCA), we will respond promptly to claims of copyright infringement on our website.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>2. Filing a DMCA Notice</h2>
+            <p>If you believe that your copyrighted work has been copied in a way that constitutes copyright infringement and is accessible on our website, please notify us by providing the following information:</p>
+            <ul>
+              <li>A physical or electronic signature of the copyright owner or authorized representative</li>
+              <li>Identification of the copyrighted work claimed to have been infringed</li>
+              <li>Identification of the material that is claimed to be infringing, including its URL or location</li>
+              <li>Your contact information (address, telephone number, and email address)</li>
+              <li>A statement that you have a good faith belief that the use is not authorized by the copyright owner</li>
+              <li>A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the copyright owner</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>3. Where to Send DMCA Notices</h2>
+            <p><strong>Email:</strong> contact@MemesSoundBoard.com</p>
+            <p><strong>Subject Line:</strong> DMCA Copyright Infringement Notice</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>4. Our Response to DMCA Notices</h2>
+            <p>Upon receiving a valid DMCA notice, we will:</p>
+            <ul>
+              <li>Remove or disable access to the allegedly infringing material</li>
+              <li>Notify the user who posted the material about the removal</li>
+              <li>Terminate repeat infringers' accounts as appropriate</li>
+              <li>Respond to the copyright owner within a reasonable timeframe</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>5. Counter-Notification</h2>
+            <p>If you believe your content was wrongly removed due to a DMCA notice, you may file a counter-notification containing:</p>
+            <ul>
+              <li>Your physical or electronic signature</li>
+              <li>Identification of the material that has been removed</li>
+              <li>A statement under penalty of perjury that you have a good faith belief the material was removed by mistake</li>
+              <li>Your name, address, and telephone number</li>
+              <li>A statement that you consent to the jurisdiction of the Federal District Court</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>6. Repeat Infringers</h2>
+            <p>We have a policy of terminating the accounts of users who are repeat copyright infringers. Users who repeatedly upload infringing content will have their accounts permanently banned.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>7. Fair Use</h2>
+            <p>We recognize that some uses of copyrighted material may be considered fair use under copyright law. We encourage copyright owners to consider whether their use complaint is valid before filing a DMCA notice.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>8. False Claims</h2>
+            <p>Please note that under Section 512(f) of the DMCA, any person who knowingly materially misrepresents that material is infringing may be subject to liability for damages. Do not make false claims.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>9. Contact Information</h2>
+            <p>For all DMCA-related inquiries, please contact: contact@MemesSoundBoard.com</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .legal-section {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: sans-serif;
+  }
+
+  .legal-container h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .legal-container .page-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: normal;
+  }
+
+  .legal-container .policy-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-container .policy-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container .policy-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .legal-container .policy-section p strong {
+    color: #333;
+    font-weight: 600;
+  }
+
+  .legal-container .policy-section ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .legal-container .policy-section li {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .legal-container a:hover {
+    text-decoration: underline;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .legal-section {
+      padding: 20px 15px;
+    }
+
+    .legal-container h1 {
+      font-size: 2rem;
+    }
+
+    .legal-container .policy-section h2 {
+      font-size: 1.3rem;
+    }
+  }
+</style>

@@ -1,0 +1,251 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// SEO Meta Data
+const pageTitle = 'Privacy Policy - MemesSoundBoard';
+const pageDescription = 'Read our privacy policy to understand how we collect, use, and protect your personal information when using MemesSoundBoard.';
+const pageKeywords = 'privacy policy, data protection, personal information, MemesSoundBoard';
+const canonicalUrl = 'https://MemesSoundBoard/privacy-policy';
+const ogImage = '/images/og-image.jpg';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
+    <meta name="author" content="MemesSoundBoard" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Privacy Policy",
+      "description": pageDescription,
+      "url": canonicalUrl
+    })} />
+
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <Header />
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Privacy Policy</h1>
+        <p class="page-subtitle">Last Updated: December 26, 2025</p>
+      </div>
+
+      <section class="legal-section">
+        <div class="legal-container">
+          <section class="policy-section">
+            <h2>1. Introduction</h2>
+            <p>Welcome to MemesSoundBoard ("we," "our," or "us"). We respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website MemesSoundBoard.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>2. Information We Collect</h2>
+
+            <h3>2.1 Information You Provide</h3>
+            <ul>
+              <li>Account information (email address, username) if you register</li>
+              <li>User-generated content (custom soundboards, favorites)</li>
+              <li>Communications with us (emails, feedback)</li>
+            </ul>
+
+            <h3>2.2 Automatically Collected Information</h3>
+            <ul>
+              <li>Device information (browser type, operating system)</li>
+              <li>Usage data (pages visited, sounds played)</li>
+              <li>IP address and location data</li>
+              <li>Cookies and similar tracking technologies</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>3. How We Use Your Information</h2>
+            <ul>
+              <li>To provide and maintain our services</li>
+              <li>To personalize your experience</li>
+              <li>To improve our website and services</li>
+              <li>To communicate with you about updates and features</li>
+              <li>To analyze usage patterns and trends</li>
+              <li>To protect against fraud and abuse</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>4. Cookies and Tracking Technologies</h2>
+            <p>We use cookies and similar technologies to enhance your experience, remember your preferences, and analyze site traffic. You can control cookies through your browser settings, but disabling them may affect website functionality.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>5. Data Sharing and Disclosure</h2>
+            <p>We do not sell your personal information. We may share your information only in the following circumstances:</p>
+            <ul>
+              <li>With your consent</li>
+              <li>To comply with legal obligations</li>
+              <li>To protect our rights and prevent fraud</li>
+              <li>With service providers who assist in operating our website</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>6. Data Security</h2>
+            <p>We implement reasonable security measures to protect your information from unauthorized access, alteration, or destruction. However, no internet transmission is completely secure, and we cannot guarantee absolute security.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>7. Your Rights</h2>
+            <p>Depending on your location, you may have the following rights:</p>
+            <ul>
+              <li>Access your personal information</li>
+              <li>Correct inaccurate data</li>
+              <li>Request deletion of your data</li>
+              <li>Object to data processing</li>
+              <li>Data portability</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>8. Children's Privacy</h2>
+            <p>Our service is not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If you believe we have collected such information, please contact us immediately.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>9. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last Updated" date.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>10. Contact Us</h2>
+            <p>If you have questions about this Privacy Policy, please contact us at contact@MemesSoundBoard.com</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .legal-section {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: sans-serif;
+  }
+
+  .legal-container h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .legal-container .page-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: normal;
+  }
+
+  .legal-container .policy-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-container .policy-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container .policy-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  .legal-container .policy-section p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .legal-container .policy-section ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .legal-container .policy-section li {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-container .policy-section li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .legal-container a:hover {
+    text-decoration: underline;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .legal-section {
+      padding: 20px 15px;
+    }
+
+    .legal-container h1 {
+      font-size: 2rem;
+    }
+
+    .legal-container .policy-section h2 {
+      font-size: 1.3rem;
+    }
+  }
+</style>
