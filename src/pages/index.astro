@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SoundButton from '../components/SoundButton.astro';
+import PWA from '../components/PWA.astro';
 import { fetchNewSounds, fetchTrendingSounds, fetchUserFavorites, getAuthToken } from '../lib/api';
 
 // Fetch sounds data - 44 for desktop (11x4), 16 for mobile (4x4)
@@ -59,6 +60,9 @@ const shortDescription = 'MemesSoundBoard is your ultimate destination for unblo
     <meta name="theme-color" content="#1a1a1a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- PWA Support -->
+    <PWA />
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify({

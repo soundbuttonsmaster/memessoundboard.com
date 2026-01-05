@@ -14,55 +14,8 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
 
-export async function getStaticPaths() {
-  // Helper function to create URL-friendly slugs
-  function slugify(text: string): string {
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
-      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-  }
-
-  const paths = [];
-  let page = 1;
-  let hasMore = true;
-  const pageSize = 100; // Fetch 100 sounds per page
-
-  // Fetch all sounds in batches
-  while (hasMore) {
-    const soundsData = await fetchSounds({ 
-      page, 
-      page_size: pageSize 
-    });
-
-    if (soundsData.results && soundsData.results.length > 0) {
-      soundsData.results.forEach((sound) => {
-        const slug = slugify(sound.name);
-        // Combine name and id into single parameter: name-id
-        paths.push({
-          params: { 
-            slug: `${slug}-${sound.id}` 
-          }
-        });
-      });
-
-      // Check if there are more pages
-      hasMore = soundsData.next !== null;
-      page++;
-    } else {
-      hasMore = false;
-    }
-
-    // Safety limit to prevent infinite loops
-    if (page > 1000) {
-      break;
-    }
-  }
-
-  return paths;
-}
+// This page is fully dynamic - no static generation
+export const prerender = false;
 
 // Parse the slug parameter (format: name-id)
 const slug = Astro.params.slug || '';

@@ -737,8 +737,9 @@ body {
 .sounds-grid {
   display: grid;
   grid-template-columns: repeat(11, minmax(0, 1fr));
-  gap: 1.5rem 1rem;
+  gap: 2rem 1rem;
   justify-items: center;
+  align-items: start;
   max-width: 100%;
   width: 100%;
   text-align: center;
@@ -755,9 +756,10 @@ body {
   margin: 0.75rem 0;
 }
 
-/* Ensure grid items align properly */
+/* Ensure grid items align properly - EXACT COPY FROM MYINSTANTS.APP */
 .sounds-grid .instant {
   width: 100%;
+  max-width: 110px;
   min-width: 0;
   display: inline-flex;
   flex-direction: column;
@@ -1015,13 +1017,14 @@ body {
 
   .sounds-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem 0.3rem;
+    gap: 1.5rem 0.5rem;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
     padding: 0;
     margin: 0;
+    align-items: start;
   }
 
   /* Limit to 4 rows on mobile (4 columns x 4 rows = 16 sounds) */
@@ -1031,6 +1034,7 @@ body {
 
   .sounds-grid .instant {
     width: 100%;
+    max-width: 75px;
     min-width: 0;
   }
 
@@ -1134,6 +1138,20 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* Ensure action buttons are visible - EXACT COPY FROM MYINSTANTS.APP */
+.instant .result-page-instant-sharebox {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.instant .instant-action-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 
 /* Sound Detail Page - Hide title and icons, make button 3x larger */
 .sound-button-center .instant .instant-link.link-secondary {

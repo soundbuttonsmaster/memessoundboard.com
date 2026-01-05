@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SoundButton from '../components/SoundButton.astro';
+import PWA from '../components/PWA.astro';
 import { fetchTrendingSounds } from '../lib/api';
 
 // Fetch initial trending sounds data (first page - 55 for desktop display)
@@ -56,6 +57,9 @@ const shortDescription = 'Check out the latest trending sound buttons and viral 
     <meta name="theme-color" content="#1a1a1a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- PWA Support -->
+    <PWA />
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify({

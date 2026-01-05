@@ -4,40 +4,8 @@ import Footer from '../../components/Footer.astro';
 import SoundButton from '../../components/SoundButton.astro';
 import { fetchCategoryById, fetchSounds, fetchCategories } from '../../lib/api';
 
-export async function getStaticPaths() {
-  const categories = await fetchCategories();
-  
-  const paths = [];
-  
-  // Helper function to create URL-friendly slugs
-  function slugify(text: string): string {
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
-      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-  }
-  
-  // Generate paths for all categories and their children
-  function processCategory(category: any) {
-    const slug = slugify(category.name);
-    paths.push({
-      params: { slug, id: category.id.toString() }
-    });
-    
-    // Process children recursively
-    if (category.children && category.children.length > 0) {
-      category.children.forEach((child: any) => {
-        processCategory(child);
-      });
-    }
-  }
-  
-  categories.forEach(processCategory);
-  
-  return paths;
-}
+// This page is fully dynamic - no static generation
+export const prerender = false;
 
 const { slug, id } = Astro.params;
 
